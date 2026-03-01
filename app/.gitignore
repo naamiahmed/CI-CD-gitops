@@ -1,0 +1,67 @@
+# ============================================================
+# GITIGNORE - Files and folders to exclude from Git
+# ============================================================
+# Files listed here will not be tracked by Git version control
+
+# node_modules folder - Contains all installed dependencies
+# This folder is large (~200MB+) and shouldn't be committed
+# Users can download dependencies using: npm install
+node_modules/
+
+# .env files - Contains sensitive configuration like database passwords, API keys
+# These should NEVER be committed to version control
+.env
+.env.local
+.env.*.local
+
+# IDE and Editor files
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# WebStorm
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+.vim/
+*.swp
+*.swo
+*~
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+temp/
+tmp/
+
+# OS files
+Thumbs.db
+
+# Build output (if using TypeScript or other build tools)
+dist/
+build/
+out/
+
+# Testing coverage reports
+coverage/
+.nyc_output/
+
+# Dependency lock files (optional - some teams commit these)
+# Uncomment if you want to exclude
+# package-lock.json
+# yarn.lock
