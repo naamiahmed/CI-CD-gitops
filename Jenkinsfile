@@ -3,10 +3,11 @@ pipeline {
 
     environment {
         IMAGE_NAME = "naamiahmed/django-devops"
-        TAG = "latest"
+        TAG = "${BUILD_NUMBER}"
     }
 
     stages {
+
         stage('Checkout Code') {
             steps {
                 checkout scm
@@ -26,8 +27,12 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    sh 'docker push $IMAGE_NAME:$TAG'
+
+                    sh '''
+                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    docker push $IMAGE_NAME:$TAG
+                    docker logout
+                    '''
                 }
             }
         }
@@ -37,9 +42,21 @@ pipeline {
                 sh '''
                 docker stop django-container || true
                 docker rm django-container || true
+
                 docker pull $IMAGE_NAME:$TAG
-                docker run -d -p 8000:8000 --name django-container $IMAGE_NAME:$TAG
+
+                docker run -d \
+                  --restart always \
+                  -p 8000:8000 \
+                  --name django-container \
+                  $IMAGE_NAME:$TAG
                 '''
+            }
+        }
+
+        stage('Cleanup Docker Images') {
+            steps {
+                sh 'docker image prune -f'
             }
         }
     }
